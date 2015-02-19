@@ -2,26 +2,27 @@ install.packages("wordcloud")
 library(tm)
 library(wordcloud)
 
+#
+# para las fechas: http://stackoverflow.com/questions/9749598/r-obtaining-month-and-year-from-a-date
+#
+
 stopWords <- stopwords("en")
 
 urlV <- c("https://www.gutenberg.org/cache/epub/2147/pg2147.txt",
           "https://www.gutenberg.org/cache/epub/2148/pg2148.txt",
           "https://www.gutenberg.org/cache/epub/2149/pg2149.txt",
-          "https://www.gutenberg.org/cache/epub/2150/pg2150.txt",
-          "https://www.gutenberg.org/cache/epub/2151/pg2151.txt")
+          "https://www.gutenberg.org/cache/epub/2150/pg2150.txt")
+#5th volume is about poems, out of the scope of this analysis -> "https://www.gutenberg.org/cache/epub/2151/pg2151.txt"
+#Another book containing the poems:
 urlPoems <- "https://www.gutenberg.org/cache/epub/10031/pg10031.txt"
 
 poev1text <- read_data("PoeV1",urlV[1])
 
-tittlesV1 <- c("THE UNPARALLELED ADVENTURES OF ONE HANS PFAAL",
-               "THE GOLD-BUG",
-               "FOUR BEASTS IN ONE--THE HOMO-CAMELEOPARD",
-               "THE MURDERS IN THE RUE MORGUE",
-               "THE MYSTERY OF MARIE ROGET",
-               "THE BALLOON-HOAX",
-               "MS. FOUND IN A BOTTLE",
-               "THE OVAL PORTRAIT",
-               "End of Project Gutenberg")
+setwd("~/DataScience/PoeAnalysis")
+tittles <- readLines("PoeTitles.txt",encoding="UTF-8")
+tittles <- paste(tittles, collapse=" ")
+tittles <- unlist(strsplit(tittles, "-ENDVOL-"))
+
 
 splittingV1 <- parse_tales(poev1text,tittlesV1)
 textNoPunct <- gsub("[[:blank:][:punct:]+]", " ", splittingV1[1])
